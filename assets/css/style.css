@@ -1,0 +1,15 @@
+.hidden {
+    display: none;
+}
+body {
+    text-align: center;
+}
+.card-header {
+    margin-bottom: 15px;
+}
+#p1-buttons, #p2-buttons {
+    margin-bottom: 15px;
+}
+.card {
+    margin-bottom: 15px;
+}
