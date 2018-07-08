@@ -1,52 +1,146 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>2-Player Rocks, Paper, Scissors</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en-us">
+    <head>
+        <meta charset="UTF-8">
+        <title>Multi-Player RPS!</title>
+
+        <!-- Link to the jQuery Library -->
+        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     
-    <!-- reset.css, bootstrap, and custom css -->
-    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootsrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
-    
-    <!-- jQuery, firebase, bootstrap, and custom js -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="assets/js/game.js"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="row"></div>
-            <section class="card col-12" id="game-area">
-                <section class="card-header" id="scoreboard">
-                    <h3>Player 1 Wins: <span id="p1-wins">0</span></h3>
-                    <h3>Player 2 Wins: <span id="p2-wins">0</span></h3>
-                    <h3>Ties: <span id="ties">0</span></h3>
-                </section>
-                <section class="hidden" id="p1-buttons">
-                    <button class="btn btn-secondary" id="p1-rock-button">Rock</button>
-                    <button class="btn btn-secondary" id="p1-paper-button">Paper</button>
-                    <button class="btn btn-secondary" id="p1-scissors-button">Scissors</button>
-                </section>
-                <section class="hidden" id="p2-buttons">
-                    <button class="btn btn-secondary" id="p2-rock-button">Rock</button>
-                    <button class="btn btn-secondary" id="p2-paper-button">Paper</button>
-                    <button class="btn btn-secondary" id="p2-scissors-button">Scissors</button>
-                </section>
-                <section id="selections">
-                    <h5 id="user-player"></h5>
-                    <h5>Player 1 chose <span id="p1-selection">nothing</span></h5>
-                    <h5>Player 2 chose <span id="p2-selection">nothing</span></h5>
-                </section>
-            </section>
-            <section id="join-buttons">
-                <button class="btn btn-warning" id="p1-join">Join as Player 1</button>
-                <button class="btn btn-warning" id="p2-join">Join as Player 2</button>
-            </section>
-    </div>
-    
-</body>
+        <!-- Links to Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+        <script src="assets/js/firebase.js"></script>
+
+        <!-- Link to Bootstrap Library and CSS -->
+        <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    </head>
+
+    <body>
+
+        <!-- Overall Bootstrap Grid -->
+        <div class="container">
+
+            <!-- Jumbotron with Title -->
+            <div class="jumbotron">
+                <h1 class="text-center"><strong>Welcome to Rock-Paper-Scissors Multi-Player!</strong></h1>
+                <h2 class="text-center">Enter your name to start the game</h2>
+            </div> <!-- End Jumbotron -->
+
+            <!-- Player Name Section -->
+            <div class="formPanel">
+                <form id="name-form">
+                    <input type="text" id="name-input" placeholder="Your Name">
+                    <input id="add-name" type="submit" value="Submit">
+                </form>
+            </div> <!-- End Player Name Section -->
+
+            <!-- Game Data Section -->
+            <div class="panel panel-default">
+                <div class="row"> <!-- Game Data Row -->
+
+                    <!-- Player 1 Section -->
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="panel panel-default playerPanel" id="playerPanel1">
+                            <div class="panel-heading panelName">
+                                <h3 class="panel-title text-center" id="playerOneName"></h3>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Rock</div>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Paper</div>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Scissors</div>
+                            </div>
+
+                            
+                            <div class="panel-body panelStats text-center">
+                                <div class="stats" id="player1Stats"></div>
+                            </div>
+                        </div>
+                    </div> <!-- End Player 1 Section -->
+
+                    <!-- Game Outcome Section -->
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="panel panel-default gamePanel">
+                            <h3 class="panel-title text-center" id="waitingNotice"></h3>
+                            <h3 class="panel-title text-center" id="roundOutcome">Rock-Paper-Scissors</h3>
+                        </div> <!-- End Game Outcome Section -->
+                    </div>
+
+                    <!-- Player 2 Section -->
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="panel panel-default playerPanel" id="playerPanel2">
+                            <div class="panel-heading panelName">
+                                <h3 class="panel-title text-center" id="playerTwoName"></h3>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Rock</div>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Paper</div>
+                            </div>
+
+                            <div class="panel-body panelOption text-center">
+                                <div class="option">Scissors</div>
+                            </div>
+
+
+                            <div class="panel-body panelStats text-center">
+                                <div class="stats" id="player2Stats"></div>
+                            </div>
+                        </div>
+                    </div> <!-- End Player 2 Section -->
+                
+                </div> <!-- Game Data Row -->
+            </div> <!-- End Game Data Section -->
+        
+            <!-- Chat Section -->
+            <div class="row">
+
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <div id="chatDisplay"></div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="chatInput">
+                        <div class="chatLabel">Type Your Message!</div>
+
+                        <div class="chatPanel">
+                            <form id="chat-form">
+                                <textarea type="text" id="chat-input"></textarea>
+                                <input id="chat-send" type="submit" value="Send">
+                            </form>
+                        </div>
+                    </div>
+                </div> <!-- End Player Name Section -->
+
+            </div> <!-- End Chat Section -->
+
+            <!-- Row containing the website footer -->
+            <div class="row">
+
+                <div id="footerSpacer">
+                </div>
+
+                <div class="footer navbar-fixed-bottom" id="footerPanel"></div>
+                </div>
+
+            </div> <!-- End the footer row -->
+
+        </div> <!-- End Bootstrap Grid -->
+
+        <!-- Load the JavaScript application file -->
+        <script type="text/javascript" src="assets/js/game.js"></script>
+
+    </body>
 </html>
