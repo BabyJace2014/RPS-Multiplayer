@@ -183,7 +183,7 @@ $("#add-name").on("click", function(event) {
 
             yourPlayerName = $("#name-input").val().trim();
             player1 = {
-                name: youtPlayerName,
+                name: yourPlayerName,
                 win: 0,
                 loss: 0,
                 tie: 0,
