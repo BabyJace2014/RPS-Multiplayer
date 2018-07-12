@@ -65,12 +65,12 @@ body {
 .playerPanel {
     height: 283px;
     background-color: transparent;
-    border: 3px solid #b03138;
+    border: 10px solid #b03138;
     border-radius: 10px;
 }
 
 .playerPanelTurn {
-    border: 5px solid #27CC73;
+    border: 20px solid #27CC73;
 }
 
 .playerPanel .panelName {

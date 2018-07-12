@@ -85,7 +85,7 @@ database.ref("/players/").on("value", function(snapshot) {
 
     // If both players are present run game
     if (player1 && player2) {
-        // Update display for player1 s turn
+        // Update display for player1 s turn with a green border around panel
         $("#playerPanel1").addClass("playerPanelTurn");
 
         // Update the center display
@@ -157,7 +157,7 @@ database.ref("/turn/").on("value", function(snapshot) {
         if (player1 && player2) {
             $("#playerPanel1").removeClass("playerPanelTurn");
             $("#playerPanel2").addClass("playerPanelTurn");
-            $("waitingNotice").html("Waiting on " + player2Name + " to choose...");
+            $("#waitingNotice").html("Waiting on " + player2Name + " to choose...");
         }
     }
 });
@@ -259,6 +259,7 @@ $("#playerPanel1").on("click", ".panelOption", function(event) {
     if (player1 && player2 && (yourPlayerName === player1.name) && (turn === 1) ) {
         // Record player1's choice
         var choice = $(this).text().trim();
+        
 
         // Record the choice in firebase
         player1Choice = choice;
@@ -267,6 +268,7 @@ $("#playerPanel1").on("click", ".panelOption", function(event) {
         // Set the turn value to 2 for player2's turn
         turn = 2;
         database.ref().child("/turn").set(2);
+        
     }
 });
 
@@ -367,4 +369,5 @@ function rpsCompare() {
     // Set the turn value to 1, to now make it player1's turn
     turn =1;
     database.ref().child("/turn").set(1);
+    
 }
